@@ -1,15 +1,29 @@
-import React from 'react';
+import {useState} from 'react';
+import NewToDo from './components/NewToDo';
 import ToDos from './components/ToDos';
 import todo from './models/todo';
 
 function App() {
+const [todos, setTodos] = useState<todo[]>([]);
 
-  const todos = [
-    new todo('read a book'), new todo('learn react')
-  ]
+  const addingToDoHandler = (text: string) =>{
+      const newTodos = new todo(text);
+
+      setTodos((prevTodo)=>{
+          return prevTodo.concat(newTodos);
+      })
+  }
+
+  const deleteToDo = (toDOId: string) =>{
+    setTodos((prevToDo)=>{
+      return prevToDo.filter(todo => todo.id !== toDOId)
+    })
+  }
+
   return (
     <div>
-     <ToDos items={todos}/>
+      <NewToDo onAddToDo={addingToDoHandler} />
+     <ToDos items={todos} onRemoveToDo={deleteToDo}/>
     </div>
   );
 }
